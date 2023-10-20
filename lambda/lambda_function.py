@@ -37,15 +37,19 @@ class LaunchRequestHandler(AbstractRequestHandler):
         )
 
 
-class HelloWorldIntentHandler(AbstractRequestHandler):
-    """Handler for Hello World Intent."""
+class ExchangeRateIntentHandler(AbstractRequestHandler):
+    """Handler for Exchange Rates Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("HelloWorldIntent")(handler_input)
+        return ask_utils.is_intent_name("ExchangeRateIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Hello World!"
+        # request API to get the prices of MLC, USD and Euro
+        mlc = 240
+        usd = 250
+        euro = 280
+        speak_output = f"Asere está volao los precios. El MLC está en {mlc}, el USD en {usd} y el euro en {euro} pesos"
 
         return (
             handler_input.response_builder
@@ -171,8 +175,8 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 sb = SkillBuilder()
 
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
+sb.add_request_handler(ExchangeRateIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
