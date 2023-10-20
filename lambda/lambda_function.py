@@ -85,11 +85,11 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         currency_type = slots["currency"].value
 
         text_output = ""
-        if currency_type = "USD":
+        if currency_type == "USD":
             text_output = f"El U. S. D. anda por los {usd_value} pesos."
-        elif currency_type = "EURO":
+        elif currency_type == "EURO":
             text_output = f"El Euro más caliente que el caribe. {eur_value} pesos."
-        elif currency_type = "MLC":
+        elif currency_type == "MLC":
             text_output = f"El M. L. C. un poco por debajo del dólar a {mlc_value} pesos."
         else:
             text_output = "Ni idea de lo que quieres decir compadre."
