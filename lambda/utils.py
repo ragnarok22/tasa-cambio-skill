@@ -1,6 +1,7 @@
 import logging
 import os
 import boto3
+import requests
 from botocore.exceptions import ClientError
 
 
@@ -25,3 +26,18 @@ def create_presigned_url(object_name):
 
     # The response contains the presigned URL
     return response
+
+
+def get_exchange_rates():
+    url = "https://exchange-rate.decubba.com/api/informal/cup"
+
+    response = requests.get(url)
+    data = response.json()
+    currencies = {}
+    for exchange_rate in data["exchange_rate"]:
+        source_currency = exchange_rate["source_currency"]
+        mid_value = exchange_rate["mid"]
+        currencies[source_currency] = mid_value
+    
+    return currencies
+    
