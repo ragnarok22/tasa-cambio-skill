@@ -14,7 +14,7 @@ from ask_sdk_core.handler_input import HandlerInput
 
 from ask_sdk_model import Response
 
-from utils import get_exchange_rates
+from utils import get_exchange_rates, get_random_greating
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -53,7 +53,9 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
         mlc_value = round(currencies["MLC"], 2)
         usd_value = round(currencies["USD"], 2)
         eur_value = round(currencies["EUR"], 2)
-        speak_output = f'Asere están volao los precios. El M. L. C. está en {mlc_value}, el U. S. D. en {usd_value} y el euro en {eur_value} pesos'
+        
+        random_greating = get_random_greating()
+        speak_output = f'{random_greating}. El M. L. C. está en {mlc_value} pesos. El U. S. D. casi en lo mismo con un valor de {usd_value} pesos. Y el Euro ni se diga. Ese anda por los {eur_value} pesos'
 
         return (
             handler_input.response_builder
