@@ -49,7 +49,7 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         # request API to get the prices of MLC, USD and Euro
         currencies = get_exchange_rates()
-        speak_output = f"Asere está volao los precios. El M. L. C. está en {currencies["MLC"]}, el U. S. D. en {currencies["USD"]} y el euro en {currencies["EUR"]} pesos"
+        speak_output = f'Asere está volao los precios. El M. L. C. está en {currencies["MLC"]}, el U. S. D. en {currencies["USD"]} y el euro en {currencies["EUR"]} pesos'
 
         return (
             handler_input.response_builder
