@@ -65,6 +65,45 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
         )
 
 
+class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
+    """Handler for Exchange Rates Request Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("ExchangeRateIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        # request API to get the prices of MLC, USD and Euro
+        currencies = get_exchange_rates()
+        
+        mlc_value = round(currencies["MLC"], 2)
+        usd_value = round(currencies["USD"], 2)
+        eur_value = round(currencies["EUR"], 2)
+        
+        
+        slots = handler_input.request_envelope.request.intent.slots
+        currency_type = slots["currency"].value
+        
+        if currency_type = "USD":
+            text_output = f"El U. S. D. anda por los {usd_value} pesos."
+        elif currency_type = "EURO":
+            text_output = f"El Euro más caliente que el caribe. {eur_value} pesos."
+        elif currency_type = "MLC":
+            text_output = f"El M. L. C. un poco por debajo del dólar a {mlc_value} pesos."
+        else:
+            pass
+        
+        random_greating = get_random_greating()
+        speak_output = f'{random_greating}. {text_output}'
+
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                # .ask("add a reprompt if you want to keep the session open for the user to respond")
+                .response
+        )
+
+
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
     def can_handle(self, handler_input):
@@ -92,7 +131,7 @@ class CancelOrStopIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Goodbye!"
+        speak_output = "Cuidate bro!"
 
         return (
             handler_input.response_builder
