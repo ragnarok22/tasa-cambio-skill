@@ -1,7 +1,10 @@
 import logging
+import random
 import os
+
 import boto3
 import requests
+
 from botocore.exceptions import ClientError
 
 
@@ -40,4 +43,8 @@ def get_exchange_rates():
         currencies[source_currency] = mid_value
     
     return currencies
-    
+
+
+def get_random_greating():
+    greatings_list = ["Hola", "Cómo estás", "Python es genial", "Saludos desde Cuba", "Adiós"]
+    return random.choice(greatings_list)
