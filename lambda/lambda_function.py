@@ -83,7 +83,8 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         
         slots = handler_input.request_envelope.request.intent.slots
         currency_type = slots["currency"].value
-        
+
+        text_output = ""
         if currency_type = "USD":
             text_output = f"El U. S. D. anda por los {usd_value} pesos."
         elif currency_type = "EURO":
@@ -91,7 +92,7 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         elif currency_type = "MLC":
             text_output = f"El M. L. C. un poco por debajo del dólar a {mlc_value} pesos."
         else:
-            pass
+            text_output = "Ni idea de lo que quieres decir compadre."
         
         random_greating = get_random_greating()
         speak_output = f'{random_greating}. {text_output}'
@@ -222,6 +223,7 @@ sb = SkillBuilder()
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(ExchangeRateIntentHandler())
+sb.add_request_handler(ExchangeRateRequestIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
