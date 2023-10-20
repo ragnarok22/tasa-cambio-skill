@@ -14,6 +14,8 @@ from ask_sdk_core.handler_input import HandlerInput
 
 from ask_sdk_model import Response
 
+from .utils import get_exchange_rates
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -46,10 +48,8 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         # request API to get the prices of MLC, USD and Euro
-        mlc = 240
-        usd = 250
-        euro = 280
-        speak_output = f"Asere está volao los precios. El MLC está en {mlc}, el USD en {usd} y el euro en {euro} pesos"
+        currencies = get_exchange_rates()
+        speak_output = f"Asere está volao los precios. El M. L. C. está en {currencies["MLC"]}, el U. S. D. en {currencies["USD"]} y el euro en {currencies["EUR"]} pesos"
 
         return (
             handler_input.response_builder
