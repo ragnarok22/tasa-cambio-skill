@@ -83,6 +83,8 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         
         slots = handler_input.request_envelope.request.intent.slots
         currency_type = slots["currency"].value
+        
+        logger.info(slots)
 
         text_output = ""
         if currency_type == "USD":
