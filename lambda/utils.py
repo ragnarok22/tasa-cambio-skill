@@ -46,5 +46,5 @@ def get_exchange_rates():
 
 
 def get_random_greating():
-    greatings_list = ["Asere que bolá? Los precios están mandáo.", "En talla asere.", "Ufff, los precios están por las nubes.", "Saludos broder."]
+    greatings_list = ["Asere que bolá? Los precios están mandáo", "En talla asere", "Ufff, los precios están por las nubes", "Saludos broder"]
     return random.choice(greatings_list)

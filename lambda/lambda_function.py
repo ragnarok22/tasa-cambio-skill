@@ -94,7 +94,7 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         elif currency_type == "MLC":
             text_output = f"El M. L. C. un poco por debajo del dólar a {mlc_value} pesos."
         else:
-            text_output = "Ni idea de lo que quieres decir compadre."
+            text_output = f"Ni idea de lo que quieres decir compadre. No conozco ningún {currency_type}"
         
         random_greating = get_random_greating()
         speak_output = f'{random_greating}. {text_output}'
