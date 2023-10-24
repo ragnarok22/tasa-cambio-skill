@@ -115,7 +115,7 @@ class HelpIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "You can say hello to me! How can I help?"
+        speak_output = "Necesitas que te tire un cabo? Solo pregunta por las tasas de cambio de una moneda en específico y yo te tiro el dato asere."
 
         return (
             handler_input.response_builder
@@ -151,8 +151,8 @@ class FallbackIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In FallbackIntentHandler")
-        speech = "Hmm, I'm not sure. You can say Hello or Help. What would you like to do?"
-        reprompt = "I didn't catch that. What can I help you with?"
+        speech = "Hmm, No estoy seguro asere. Puedes decir Ayuda o preguntarme por cualquier moneda en Cuba. Dime que necesitas"
+        reprompt = "No entendí un carajo. En qué quieres que te tire un cabo?"
 
         return handler_input.response_builder.speak(speech).ask(reprompt).response
 
@@ -206,7 +206,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         # type: (HandlerInput, Exception) -> Response
         logger.error(exception, exc_info=True)
 
-        speak_output = "Sorry, I had trouble doing what you asked. Please try again."
+        speak_output = "Asere lo siento, tuve un problemilla ahí. Trata de nuevo."
 
         return (
             handler_input.response_builder
