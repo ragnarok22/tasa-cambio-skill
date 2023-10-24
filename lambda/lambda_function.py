@@ -87,7 +87,7 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         logger.info(slots)
 
         text_output = ""
-        if currency_type == "USD":
+        if currency_type == "USD" or currency_type == "dólar":
             text_output = f"El U. S. D. anda por los {usd_value} pesos."
         elif currency_type == "euro":
             text_output = f"El Euro más caliente que el caribe. {eur_value} pesos."
