@@ -53,6 +53,28 @@
             "dime el valor del {currency}",
             "Cuál es el valor del {currency}"
           ]
+        },
+        {
+          "slots": [
+            {
+              "name": "amount",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "sourceCurrency",
+              "type": "CURRENCYTYPE"
+            }
+          ],
+          "name": "ConvertCurrencyIntent",
+          "samples": [
+            "cuántos pesos son {amount} {sourceCurrency}",
+            "cuanto son {amount} {sourceCurrency} en pesos",
+            "convierte {amount} {sourceCurrency} a pesos",
+            "dame {amount} {sourceCurrency} en pesos",
+            "cuánto es {amount} {sourceCurrency}",
+            "a cuánto equivalen {amount} {sourceCurrency}",
+            "{amount} {sourceCurrency} cuántos pesos son"
+          ]
         }
       ],
       "types": [

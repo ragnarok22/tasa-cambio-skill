@@ -139,6 +139,87 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         return handler_input.response_builder.speak(speak_output).response
 
 
+class ConvertCurrencyIntentHandler(AbstractRequestHandler):
+    """Handler for Currency Conversion Intent."""
+
+    def can_handle(self, handler_input: HandlerInput) -> bool:
+        return ask_utils.is_intent_name("ConvertCurrencyIntent")(handler_input)
+
+    def handle(self, handler_input: HandlerInput) -> Response:
+        """Convert amount from foreign currency to Cuban pesos."""
+        logger.info("Processing ConvertCurrencyIntent")
+        currencies = get_rounded_exchange_rates()
+
+        if currencies is None:
+            logger.warning("Failed to fetch exchange rates")
+            speak_output = (
+                "Coño asere, tengo un problema conectándome. "
+                "Intenta de nuevo en un ratito."
+            )
+            return handler_input.response_builder.speak(speak_output).response
+
+        slots = handler_input.request_envelope.request.intent.slots
+        amount_slot = slots.get("amount")
+        currency_slot = slots.get("sourceCurrency")
+
+        if not amount_slot or not amount_slot.value:
+            logger.warning("Amount slot is empty or missing")
+            speak_output = (
+                "No te entendí bien asere. Dime la cantidad que quieres convertir."
+            )
+            return handler_input.response_builder.speak(speak_output).response
+
+        if not currency_slot or not currency_slot.value:
+            logger.warning("Currency slot is empty or missing")
+            speak_output = (
+                "No te entendí la moneda asere. Dime dólar, euro o M. L. C."
+            )
+            return handler_input.response_builder.speak(speak_output).response
+
+        try:
+            amount = float(amount_slot.value)
+        except ValueError:
+            logger.warning(f"Invalid amount value: {amount_slot.value}")
+            speak_output = "No entendí la cantidad asere. Dime un número."
+            return handler_input.response_builder.speak(speak_output).response
+
+        currency_type = currency_slot.value
+        logger.info(f"Converting {amount} {currency_type} to CUP")
+
+        # Get exchange rate
+        rate = None
+        currency_name = ""
+        if currency_type == "USD" or currency_type == "dólar":
+            rate = currencies["USD"]
+            currency_name = "dólares"
+        elif currency_type == "euro":
+            rate = currencies["EUR"]
+            currency_name = "euros"
+        elif currency_type.upper() == "MLC":
+            rate = currencies["MLC"]
+            currency_name = "M. L. C."
+        else:
+            speak_output = (
+                f"Ni idea de lo que quieres decir compadre. "
+                f"No conozco ningún {currency_type}"
+            )
+            return handler_input.response_builder.speak(speak_output).response
+
+        # Calculate conversion
+        total_pesos = round(amount * rate, 2)
+
+        # Format output
+        amount_str = str(int(amount)) if amount == int(amount) else str(amount)
+        total_str = str(int(total_pesos)) if total_pesos == int(total_pesos) else str(total_pesos)
+
+        random_greeting = get_random_greeting()
+        speak_output = (
+            f"{random_greeting}. {amount_str} {currency_name} son {total_str} pesos cubanos."
+        )
+
+        return handler_input.response_builder.speak(speak_output).response
+
+
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
 
@@ -247,6 +328,7 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(ExchangeRateIntentHandler())
 sb.add_request_handler(ExchangeRateRequestIntentHandler())
+sb.add_request_handler(ConvertCurrencyIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
