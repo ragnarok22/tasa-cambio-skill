@@ -190,7 +190,7 @@ class TestHelpIntentHandler:
 
         handler.handle(handler_input)
 
-        assert "Necesitas que te tire un cabo" in str(
+        assert "Qué bolá asere" in str(
             handler_input.response_builder.speak.call_args
         )
 
