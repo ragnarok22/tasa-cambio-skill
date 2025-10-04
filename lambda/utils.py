@@ -10,10 +10,13 @@ from botocore.exceptions import ClientError
 def create_presigned_url(object_name):
     """Generate a presigned URL to share an S3 object.
 
-    Expiration capped at 60 seconds.
+    Currently unused but ready for future features requiring temporary S3 links.
 
-    :param object_name: string
-    :return: Presigned URL as string. If error, returns None.
+    Args:
+        object_name: S3 object key
+
+    Returns:
+        Presigned URL string (60 second expiration), or None if error occurs
     """
     s3_client = boto3.client(
         "s3",
@@ -27,17 +30,24 @@ def create_presigned_url(object_name):
         response = s3_client.generate_presigned_url(
             "get_object",
             Params={"Bucket": bucket_name, "Key": object_name},
-            ExpiresIn=60 * 1,
+            ExpiresIn=60,
         )
     except ClientError as e:
         logging.error(e)
         return None
 
-    # The response contains the presigned URL
     return response
 
 
 def get_exchange_rates():
+    """Fetch current exchange rates from the proxy API.
+
+    Returns:
+        dict: Exchange rates with keys 'USD', 'EUR', 'MLC' (float values)
+
+    Raises:
+        requests.HTTPError: If API request fails
+    """
     url = "https://tasa-cambio-cuba.vercel.app/api/exchange-rate"
 
     response = requests.get(url)
@@ -45,16 +55,19 @@ def get_exchange_rates():
 
     data = response.json()
 
-    currencies = {
+    return {
         "USD": data["usd"],
         "EUR": data["eur"],
         "MLC": data["mlc"],
     }
 
-    return currencies
-
 
 def get_random_greating():
+    """Return a random Cuban Spanish greeting phrase.
+
+    Returns:
+        str: Random greeting from predefined list of Cuban expressions
+    """
     greatings_list = [
         "Asere que bolá? Los precios están mandáo",
         "En talla asere",

@@ -39,7 +39,7 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
         return ask_utils.is_intent_name("ExchangeRateIntent")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
-        # request API to get the prices of MLC, USD and Euro
+        """Return all exchange rates with dynamic USD/MLC comparison."""
         currencies = get_exchange_rates()
 
         mlc_value = round(currencies["MLC"], 2)
@@ -48,7 +48,7 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
 
         random_greating = get_random_greating()
 
-        # Build dynamic comparison
+        # Build dynamic comparison between USD and MLC
         usd_mlc_diff = abs(usd_value - mlc_value)
         if usd_mlc_diff < 5:
             usd_phrase = f"El U. S. D. casi en lo mismo, {usd_value} pesos"
@@ -72,7 +72,7 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         return ask_utils.is_intent_name("ExchangeRateRequestIntent")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
-        # request API to get the prices of MLC, USD and Euro
+        """Return exchange rate for a specific currency requested by the user."""
         currencies = get_exchange_rates()
 
         mlc_value = round(currencies["MLC"], 2)
@@ -84,7 +84,6 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
 
         logger.info(slots)
 
-        text_output = ""
         if currency_type == "USD" or currency_type == "dólar":
             text_output = f"El U. S. D. anda por los {usd_value} pesos."
         elif currency_type == "euro":
@@ -145,7 +144,6 @@ class FallbackIntentHandler(AbstractRequestHandler):
         return ask_utils.is_intent_name("AMAZON.FallbackIntent")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
-        logger.info("In FallbackIntentHandler")
         speech = (
             "Hmm, No estoy seguro asere. Puedes decir Ayuda o preguntarme "
             "por cualquier moneda en Cuba. Dime que necesitas"
@@ -162,8 +160,6 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
         return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
-        # Any cleanup logic goes here.
-
         return handler_input.response_builder.response
 
 
@@ -208,12 +204,8 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         )
 
 
-# The SkillBuilder object acts as the entry point for your skill, routing
-# all request and response payloads to the handlers above. Make sure any new
-# handlers or interceptors you've defined are included below.
-# The order matters - they're processed top to bottom.
-
-
+# Skill builder configuration
+# Handler order matters - they're processed top to bottom
 sb = SkillBuilder()
 
 sb.add_request_handler(LaunchRequestHandler())
@@ -223,8 +215,7 @@ sb.add_request_handler(ExchangeRateRequestIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
-# Make sure IntentReflectorHandler is last so it doesn't override
-# your custom intent handlers
+# IntentReflectorHandler must be last to avoid overriding custom handlers
 sb.add_request_handler(IntentReflectorHandler())
 
 sb.add_exception_handler(CatchAllExceptionHandler())
