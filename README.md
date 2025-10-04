@@ -1,6 +1,6 @@
 # Tasa de Cambio Cubana
 
-Alexa skill that answers in Cuban Spanish with up-to-date informal market exchange rates for USD, EUR, and MLC. The backend is an AWS Lambda written in Python and powered by the `ask-sdk`. Rates are retrieved through the companion proxy service [tasa-cambio-proxy](https://github.com/ragnarok22/tasa-cambio-proxy), which caches data from [El Toque](https://eltoque.com/tasas-de-cambio-de-moneda-en-cuba-hoy) and exposes a lightweight API hosted at [tasa-cambio-cuba.vercel.app](https://tasa-cambio-cuba.vercel.app/api/exchange-rate).
+Alexa skill that answers in Cuban Spanish with up-to-date informal market exchange rates for USD, EUR, and MLC. The backend is an AWS Lambda written in Python and powered by the `ask-sdk`. Rates are retrieved through the companion proxy service [tasa-cambio-proxy](https://github.com/ragnarok22/tasa-cambio-proxy), which relies on the official API from [El Toque](https://eltoque.com/tasas-de-cambio-de-moneda-en-cuba-hoy) and exposes a lightweight API hosted at [tasa-cambio-cuba.vercel.app](https://tasa-cambio-cuba.vercel.app/api/exchange-rate).
 
 **Try it on Alexa:** [Tasa de Cambio Cubana on Amazon](https://www.amazon.com/dp/B0CLVSTJPB/)
 
@@ -24,7 +24,7 @@ Alexa skill that answers in Cuban Spanish with up-to-date informal market exchan
 
 ## Data Source & Proxy
 - Live API base: `https://tasa-cambio-cuba.vercel.app/api/exchange-rate`.
-- Upstream rates scraped from El Toque and cached to minimize rate limits and latency.
+- Upstream rates requested from the El Toque API and cached to minimize rate limits and latency.
 - Proxy codebase: [ragnarok22/tasa-cambio-proxy](https://github.com/ragnarok22/tasa-cambio-proxy).
 - When developing locally you can run the proxy project (Node.js) and point the Lambda to your local URL by overriding the constant in `lambda/utils.py`.
 
