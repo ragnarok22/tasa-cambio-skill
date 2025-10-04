@@ -10,7 +10,7 @@ from ask_sdk_core.dispatch_components.request_components import AbstractRequestH
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model.response import Response
-from utils import get_exchange_rates, get_random_greating
+from utils import get_exchange_rates, get_random_greeting
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -42,11 +42,18 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
         """Return all exchange rates with dynamic USD/MLC comparison."""
         currencies = get_exchange_rates()
 
+        if currencies is None:
+            speak_output = (
+                "Coño asere, tengo un problema conectándome. "
+                "Intenta de nuevo en un ratito."
+            )
+            return handler_input.response_builder.speak(speak_output).response
+
         mlc_value = round(currencies["MLC"], 2)
         usd_value = round(currencies["USD"], 2)
         eur_value = round(currencies["EUR"], 2)
 
-        random_greating = get_random_greating()
+        random_greeting = get_random_greeting()
 
         # Build dynamic comparison between USD and MLC
         usd_mlc_diff = abs(usd_value - mlc_value)
@@ -58,7 +65,7 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
             usd_phrase = f"El U. S. D. en {usd_value} pesos"
 
         speak_output = (
-            f"{random_greating}. El M. L. C. está en {mlc_value} pesos. "
+            f"{random_greeting}. El M. L. C. está en {mlc_value} pesos. "
             f"{usd_phrase}. Y el Euro ni se diga, ese anda por los {eur_value} pesos"
         )
 
@@ -75,13 +82,28 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         """Return exchange rate for a specific currency requested by the user."""
         currencies = get_exchange_rates()
 
+        if currencies is None:
+            speak_output = (
+                "Coño asere, tengo un problema conectándome. "
+                "Intenta de nuevo en un ratito."
+            )
+            return handler_input.response_builder.speak(speak_output).response
+
         mlc_value = round(currencies["MLC"], 2)
         usd_value = round(currencies["USD"], 2)
         eur_value = round(currencies["EUR"], 2)
 
         slots = handler_input.request_envelope.request.intent.slots
-        currency_type = slots["currency"].value
+        currency_slot = slots.get("currency")
 
+        if not currency_slot or not currency_slot.value:
+            speak_output = (
+                "No te entendí bien asere. Dime qué moneda quieres saber: "
+                "dólar, euro o M. L. C."
+            )
+            return handler_input.response_builder.speak(speak_output).response
+
+        currency_type = currency_slot.value
         logger.info(slots)
 
         if currency_type == "USD" or currency_type == "dólar":
@@ -89,17 +111,23 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         elif currency_type == "euro":
             text_output = f"El Euro más caliente que el caribe. {eur_value} pesos."
         elif currency_type.upper() == "MLC":
-            text_output = (
-                f"El M. L. C. un poco por debajo del dólar a {mlc_value} pesos."
-            )
+            mlc_usd_diff = abs(mlc_value - usd_value)
+            if mlc_usd_diff < 5:
+                text_output = f"El M. L. C. casi igual que el dólar, {mlc_value} pesos."
+            elif mlc_value < usd_value:
+                text_output = (
+                    f"El M. L. C. un poco por debajo del dólar a {mlc_value} pesos."
+                )
+            else:
+                text_output = f"El M. L. C. está en {mlc_value} pesos."
         else:
             text_output = (
                 f"Ni idea de lo que quieres decir compadre. "
                 f"No conozco ningún {currency_type}"
             )
 
-        random_greating = get_random_greating()
-        speak_output = f"{random_greating}. {text_output}"
+        random_greeting = get_random_greeting()
+        speak_output = f"{random_greeting}. {text_output}"
 
         return handler_input.response_builder.speak(speak_output).response
 

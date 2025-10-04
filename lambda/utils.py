@@ -44,34 +44,38 @@ def get_exchange_rates():
 
     Returns:
         dict: Exchange rates with keys 'USD', 'EUR', 'MLC' (float values)
+        Returns None if API request fails
 
     Raises:
-        requests.HTTPError: If API request fails
+        None - errors are caught and None is returned
     """
     url = "https://tasa-cambio-cuba.vercel.app/api/exchange-rate"
 
-    response = requests.get(url)
-    response.raise_for_status()
+    try:
+        response = requests.get(url, timeout=5)
+        response.raise_for_status()
+        data = response.json()
 
-    data = response.json()
+        return {
+            "USD": data["usd"],
+            "EUR": data["eur"],
+            "MLC": data["mlc"],
+        }
+    except (requests.RequestException, KeyError, ValueError) as e:
+        logging.error(f"Error fetching exchange rates: {e}")
+        return None
 
-    return {
-        "USD": data["usd"],
-        "EUR": data["eur"],
-        "MLC": data["mlc"],
-    }
 
-
-def get_random_greating():
+def get_random_greeting():
     """Return a random Cuban Spanish greeting phrase.
 
     Returns:
         str: Random greeting from predefined list of Cuban expressions
     """
-    greatings_list = [
+    greetings_list = [
         "Asere que bolá? Los precios están mandáo",
         "En talla asere",
         "Ufff, los precios están por las nubes",
         "Saludos broder",
     ]
-    return random.choice(greatings_list)
+    return random.choice(greetings_list)
