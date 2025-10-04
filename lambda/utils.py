@@ -32,15 +32,18 @@ def create_presigned_url(object_name):
 
 
 def get_exchange_rates():
-    url = "https://exchange-rate.decubba.com/api/informal/cup"
+    url = "https://tasa-cambio-cuba.vercel.app/api/exchange-rate"
 
     response = requests.get(url)
+    response.raise_for_status()
+    
     data = response.json()
-    currencies = {}
-    for exchange_rate in data["exchange_rate"]:
-        source_currency = exchange_rate["source_currency"]
-        mid_value = exchange_rate["mid"]
-        currencies[source_currency] = mid_value
+    
+    currencies = {
+        "USD": data["usd"],
+        "EUR": data["eur"],
+        "MLC": data["mlc"],
+    }
     
     return currencies
 
