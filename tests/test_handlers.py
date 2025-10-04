@@ -12,11 +12,13 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "lambda"))
 from lambda_function import (
     CancelOrStopIntentHandler,
     CatchAllExceptionHandler,
+    ConvertCurrencyIntentHandler,
     ExchangeRateIntentHandler,
     ExchangeRateRequestIntentHandler,
     FallbackIntentHandler,
     HelpIntentHandler,
     LaunchRequestHandler,
+    WhyExchangeRateIntentHandler,
 )
 
 
@@ -215,6 +217,169 @@ class TestFallbackIntentHandler:
         handler.handle(handler_input)
 
         assert "No estoy seguro asere" in str(
+            handler_input.response_builder.speak.call_args
+        )
+
+
+class TestConvertCurrencyIntentHandler:
+    """Tests for ConvertCurrencyIntentHandler."""
+
+    @patch("lambda_function.get_rounded_exchange_rates")
+    @patch("lambda_function.get_random_greeting")
+    def test_convert_usd_to_cup(self, mock_greeting, mock_get_rates):
+        """Test converting USD to CUP."""
+        handler = ConvertCurrencyIntentHandler()
+        handler_input = Mock()
+        mock_get_rates.return_value = {"USD": 120.0, "EUR": 130.0, "MLC": 118.0}
+        mock_greeting.return_value = "En talla asere"
+
+        amount_slot = Mock()
+        amount_slot.value = "100"
+        currency_slot = Mock()
+        currency_slot.value = "USD"
+        handler_input.request_envelope.request.intent.slots = {
+            "amount": amount_slot,
+            "sourceCurrency": currency_slot,
+        }
+
+        handler.handle(handler_input)
+
+        assert "100 dólares son 12000 pesos cubanos" in str(
+            handler_input.response_builder.speak.call_args
+        )
+
+    @patch("lambda_function.get_rounded_exchange_rates")
+    @patch("lambda_function.get_random_greeting")
+    def test_convert_euro_to_cup(self, mock_greeting, mock_get_rates):
+        """Test converting EUR to CUP."""
+        handler = ConvertCurrencyIntentHandler()
+        handler_input = Mock()
+        mock_get_rates.return_value = {"USD": 120.0, "EUR": 130.0, "MLC": 118.0}
+        mock_greeting.return_value = "En talla asere"
+
+        amount_slot = Mock()
+        amount_slot.value = "50"
+        currency_slot = Mock()
+        currency_slot.value = "euro"
+        handler_input.request_envelope.request.intent.slots = {
+            "amount": amount_slot,
+            "sourceCurrency": currency_slot,
+        }
+
+        handler.handle(handler_input)
+
+        assert "50 euros son 6500 pesos cubanos" in str(
+            handler_input.response_builder.speak.call_args
+        )
+
+    @patch("lambda_function.get_rounded_exchange_rates")
+    @patch("lambda_function.get_random_greeting")
+    def test_convert_mlc_to_cup(self, mock_greeting, mock_get_rates):
+        """Test converting MLC to CUP."""
+        handler = ConvertCurrencyIntentHandler()
+        handler_input = Mock()
+        mock_get_rates.return_value = {"USD": 120.0, "EUR": 130.0, "MLC": 118.0}
+        mock_greeting.return_value = "En talla asere"
+
+        amount_slot = Mock()
+        amount_slot.value = "75"
+        currency_slot = Mock()
+        currency_slot.value = "MLC"
+        handler_input.request_envelope.request.intent.slots = {
+            "amount": amount_slot,
+            "sourceCurrency": currency_slot,
+        }
+
+        handler.handle(handler_input)
+
+        assert "75 M. L. C. son 8850 pesos cubanos" in str(
+            handler_input.response_builder.speak.call_args
+        )
+
+    @patch("lambda_function.get_rounded_exchange_rates")
+    def test_missing_amount_slot(self, mock_get_rates):
+        """Test handler when amount slot is missing."""
+        handler = ConvertCurrencyIntentHandler()
+        handler_input = Mock()
+        mock_get_rates.return_value = {"USD": 120.0, "EUR": 130.0, "MLC": 118.0}
+
+        handler_input.request_envelope.request.intent.slots = {}
+
+        handler.handle(handler_input)
+
+        assert "No te entendí bien asere" in str(
+            handler_input.response_builder.speak.call_args
+        )
+
+    @patch("lambda_function.get_rounded_exchange_rates")
+    def test_missing_currency_slot(self, mock_get_rates):
+        """Test handler when currency slot is missing."""
+        handler = ConvertCurrencyIntentHandler()
+        handler_input = Mock()
+        mock_get_rates.return_value = {"USD": 120.0, "EUR": 130.0, "MLC": 118.0}
+
+        amount_slot = Mock()
+        amount_slot.value = "100"
+        handler_input.request_envelope.request.intent.slots = {"amount": amount_slot}
+
+        handler.handle(handler_input)
+
+        assert "No te entendí la moneda asere" in str(
+            handler_input.response_builder.speak.call_args
+        )
+
+    @patch("lambda_function.get_rounded_exchange_rates")
+    def test_invalid_amount(self, mock_get_rates):
+        """Test handler with invalid amount."""
+        handler = ConvertCurrencyIntentHandler()
+        handler_input = Mock()
+        mock_get_rates.return_value = {"USD": 120.0, "EUR": 130.0, "MLC": 118.0}
+
+        amount_slot = Mock()
+        amount_slot.value = "abc"
+        currency_slot = Mock()
+        currency_slot.value = "USD"
+        handler_input.request_envelope.request.intent.slots = {
+            "amount": amount_slot,
+            "sourceCurrency": currency_slot,
+        }
+
+        handler.handle(handler_input)
+
+        assert "No entendí la cantidad asere" in str(
+            handler_input.response_builder.speak.call_args
+        )
+
+    @patch("lambda_function.get_rounded_exchange_rates")
+    def test_api_failure(self, mock_get_rates):
+        """Test handler when API fails."""
+        handler = ConvertCurrencyIntentHandler()
+        handler_input = Mock()
+        mock_get_rates.return_value = None
+
+        handler.handle(handler_input)
+
+        assert "Coño asere, tengo un problema conectándome" in str(
+            handler_input.response_builder.speak.call_args
+        )
+
+
+class TestWhyExchangeRateIntentHandler:
+    """Tests for WhyExchangeRateIntentHandler."""
+
+    @patch("lambda_function.get_random_exchange_explanation")
+    def test_returns_explanation(self, mock_explanation):
+        """Test handler returns Cuban explanation."""
+        handler = WhyExchangeRateIntentHandler()
+        handler_input = Mock()
+        mock_explanation.return_value = (
+            "Asere, esto está subiendo porque la economía está en candela. "
+            "Con la inflación y el bloqueo (interno), el dólar se dispara como cohete."
+        )
+
+        handler.handle(handler_input)
+
+        assert "Asere, esto está subiendo porque la economía está en candela" in str(
             handler_input.response_builder.speak.call_args
         )
 

@@ -75,6 +75,19 @@
             "a cuánto equivalen {amount} {sourceCurrency}",
             "{amount} {sourceCurrency} cuántos pesos son"
           ]
+        },
+        {
+          "slots": [],
+          "name": "WhyExchangeRateIntent",
+          "samples": [
+            "por qué está subiendo el dólar",
+            "por qué suben las monedas",
+            "por qué el dólar está tan alto",
+            "explícame por qué sube el cambio",
+            "por qué las monedas están tan caras",
+            "qué está pasando con el dólar",
+            "por qué está tan caro el cambio"
+          ]
         }
       ],
       "types": [

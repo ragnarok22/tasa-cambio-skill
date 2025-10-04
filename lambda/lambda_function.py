@@ -10,7 +10,11 @@ from ask_sdk_core.dispatch_components.request_components import AbstractRequestH
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model.response import Response
-from utils import get_random_greeting, get_rounded_exchange_rates
+from utils import (
+    get_random_exchange_explanation,
+    get_random_greeting,
+    get_rounded_exchange_rates,
+)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -171,9 +175,7 @@ class ConvertCurrencyIntentHandler(AbstractRequestHandler):
 
         if not currency_slot or not currency_slot.value:
             logger.warning("Currency slot is empty or missing")
-            speak_output = (
-                "No te entendí la moneda asere. Dime dólar, euro o M. L. C."
-            )
+            speak_output = "No te entendí la moneda asere. Dime dólar, euro o M. L. C."
             return handler_input.response_builder.speak(speak_output).response
 
         try:
@@ -210,12 +212,31 @@ class ConvertCurrencyIntentHandler(AbstractRequestHandler):
 
         # Format output
         amount_str = str(int(amount)) if amount == int(amount) else str(amount)
-        total_str = str(int(total_pesos)) if total_pesos == int(total_pesos) else str(total_pesos)
+        total_str = (
+            str(int(total_pesos))
+            if total_pesos == int(total_pesos)
+            else str(total_pesos)
+        )
 
         random_greeting = get_random_greeting()
         speak_output = (
-            f"{random_greeting}. {amount_str} {currency_name} son {total_str} pesos cubanos."
+            f"{random_greeting}. {amount_str} {currency_name} "
+            f"son {total_str} pesos cubanos."
         )
+
+        return handler_input.response_builder.speak(speak_output).response
+
+
+class WhyExchangeRateIntentHandler(AbstractRequestHandler):
+    """Handler for Why Exchange Rate Intent."""
+
+    def can_handle(self, handler_input: HandlerInput) -> bool:
+        return ask_utils.is_intent_name("WhyExchangeRateIntent")(handler_input)
+
+    def handle(self, handler_input: HandlerInput) -> Response:
+        """Return a random Cuban explanation for currency increase."""
+        logger.info("Processing WhyExchangeRateIntent")
+        speak_output = get_random_exchange_explanation()
 
         return handler_input.response_builder.speak(speak_output).response
 
@@ -329,6 +350,7 @@ sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(ExchangeRateIntentHandler())
 sb.add_request_handler(ExchangeRateRequestIntentHandler())
 sb.add_request_handler(ConvertCurrencyIntentHandler())
+sb.add_request_handler(WhyExchangeRateIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())

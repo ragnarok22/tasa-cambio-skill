@@ -98,3 +98,28 @@ def get_random_greeting():
         "Saludos broder",
     ]
     return random.choice(greetings_list)
+
+
+def get_random_exchange_explanation():
+    """Return a random Cuban Spanish explanation for currency increase.
+
+    Returns:
+        str: Random explanation from predefined list of Cuban expressions
+    """
+    explanations = [
+        "Asere, esto está subiendo porque la economía está en candela. "
+        "Con la inflación y el bloqueo (interno), el dólar se dispara como cohete.",
+        "Mi socio, es por la escasez de fula. Cuando no hay billetes, "
+        "todo el mundo quiere divisa y los precios se van pa'l cielo.",
+        "Compadre, es la situación del país. Pocos dólares entrando "
+        "y mucha gente necesitando. Así sube todo como la espuma.",
+        "Oye hermano, con la crisis que hay, el que tiene dólares "
+        "los vende caro. Es la ley de la oferta y la demanda asere.",
+        "Mira, es simple: hay más demanda que oferta de divisa. "
+        "Y cuando eso pasa en Cuba, los precios se van por la azotea.",
+        "Asere, con la inflación galopante que tenemos, el peso cubano "
+        "pierde valor cada día. Por eso las divisas suben como el pan.",
+        "Hermano, es que no hay fula circulando. Y cuando escasea, "
+        "el precio se va pa'rriba más rápido que bicicleta cuesta abajo.",
+    ]
+    return random.choice(explanations)

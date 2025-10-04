@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "lambda"))
 
 from utils import (
     get_exchange_rates,
+    get_random_exchange_explanation,
     get_random_greeting,
     get_rounded_exchange_rates,
 )
@@ -153,3 +154,44 @@ class TestGetRandomGreeting:
 
         # With 50 calls, we should get at least 2 different greetings
         assert len(results) >= 2
+
+
+class TestGetRandomExchangeExplanation:
+    """Tests for get_random_exchange_explanation function."""
+
+    def test_returns_string(self):
+        """Test that function returns a string."""
+        result = get_random_exchange_explanation()
+
+        assert isinstance(result, str)
+        assert len(result) > 0
+
+    def test_returns_valid_explanation(self):
+        """Test that function returns one of the predefined explanations."""
+        valid_explanations = [
+            "Asere, esto está subiendo porque la economía está en candela. "
+            "Con la inflación y el bloqueo (interno), el dólar se dispara como cohete.",
+            "Mi socio, es por la escasez de fula. Cuando no hay billetes, "
+            "todo el mundo quiere divisa y los precios se van pa'l cielo.",
+            "Compadre, es la situación del país. Pocos dólares entrando "
+            "y mucha gente necesitando. Así sube todo como la espuma.",
+            "Oye hermano, con la crisis que hay, el que tiene dólares "
+            "los vende caro. Es la ley de la oferta y la demanda asere.",
+            "Mira, es simple: hay más demanda que oferta de divisa. "
+            "Y cuando eso pasa en Cuba, los precios se van por la azotea.",
+            "Asere, con la inflación galopante que tenemos, el peso cubano "
+            "pierde valor cada día. Por eso las divisas suben como el pan.",
+            "Hermano, es que no hay fula circulando. Y cuando escasea, "
+            "el precio se va pa'rriba más rápido que bicicleta cuesta abajo.",
+        ]
+
+        result = get_random_exchange_explanation()
+
+        assert result in valid_explanations
+
+    def test_randomness(self):
+        """Test that function can return different explanations."""
+        results = {get_random_exchange_explanation() for _ in range(50)}
+
+        # With 50 calls, we should get at least 3 different explanations
+        assert len(results) >= 3

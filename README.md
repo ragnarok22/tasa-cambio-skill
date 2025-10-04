@@ -11,17 +11,22 @@ Alexa skill that answers in Cuban Spanish with up-to-date informal market exchan
 - Launch prompt and conversational responses tailored to Cuban slang.
 - `ExchangeRateIntent` for the full set of supported currencies.
 - `ExchangeRateRequestIntent` slot (`CURRENCYTYPE`) to ask for a single currency such as "cuánto vale el dólar".
+- `ConvertCurrencyIntent` to convert amounts between foreign currencies and Cuban pesos (e.g., "cuántos pesos son 100 dólares").
+- `WhyExchangeRateIntent` to get Cuban-style explanations about why exchange rates are rising.
 - Rates served via the proxy API to avoid hitting El Toque directly on every invocation.
 - Fallback, help, and stop handlers already wired into the skill builder.
 
 ## Repository Layout
 - `lambda/`: Alexa skill Lambda source, utilities, and runtime dependencies.
   - `lambda_function.py`: Main skill handlers and entry point.
-  - `utils.py`: Helper functions for API calls and random greetings.
+  - `utils.py`: Helper functions for API calls, random greetings, and Cuban explanations.
   - `requirements.txt`: Python dependencies (boto3 excluded as it's pre-installed).
   - `__init__.py`: Package marker for Python imports.
 - `skill-package/`: ASK skill manifest, locale assets, and interaction models.
-- `requirements-dev.txt`: Tooling for local linting (`ruff`).
+- `tests/`: Comprehensive unit tests with 84%+ coverage.
+  - `test_utils.py`: Tests for utility functions.
+  - `test_handlers.py`: Tests for all Alexa intent handlers.
+- `requirements-dev.txt`: Tooling for local linting (`ruff`) and testing (`pytest`, `pytest-cov`).
 - `pyproject.toml`: Formatting and lint configuration shared across the project.
 - `ask-resources.json`: Alexa-hosted skill configuration.
 
@@ -61,9 +66,12 @@ Alexa skill that answers in Cuban Spanish with up-to-date informal market exchan
    ```
 
 ## Testing
-The project includes comprehensive unit tests with **84% code coverage**:
+The project includes comprehensive unit tests with **84%+ code coverage**:
 
 ```bash
+# Activate virtual environment first
+source .venv/bin/activate
+
 # Run all tests
 pytest
 
@@ -75,8 +83,13 @@ pytest tests/test_utils.py -v
 ```
 
 **Test coverage:**
-- `test_utils.py`: Tests for utility functions (get_exchange_rates, get_rounded_exchange_rates, get_random_greeting)
-- `test_handlers.py`: Tests for Alexa skill handlers (25 tests covering all intents)
+- `test_utils.py`: Tests for utility functions (get_exchange_rates, get_rounded_exchange_rates, get_random_greeting, get_random_exchange_explanation)
+- `test_handlers.py`: Tests for all Alexa skill handlers including:
+  - ExchangeRateIntent
+  - ExchangeRateRequestIntent
+  - ConvertCurrencyIntent (with validation for amount and currency slots)
+  - WhyExchangeRateIntent
+  - Help, Cancel/Stop, Fallback handlers
 
 ## Local Testing Tips
 - Create a simple invocation payload and call the handler directly:
