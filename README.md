@@ -49,21 +49,38 @@ Alexa skill that answers in Cuban Spanish with up-to-date informal market exchan
    ```
 2. Install runtime dependencies for the Lambda handler:
    ```bash
-   pip install -r lambda/requirements.txt
+   make install
+   # or: pip install -r lambda/requirements.txt
    ```
-3. (Optional) Install development tooling:
+3. Install development tooling:
    ```bash
-   pip install -r requirements-dev.txt
+   make install-dev
+   # or: pip install -r requirements-dev.txt
    ```
-4. Run `ruff` to check formatting and linting:
+4. Run code quality checks:
    ```bash
-   ruff check lambda/
-   ruff format lambda/
+   make format   # Format code with ruff
+   make lint     # Check linting
+   make test     # Run tests
    ```
-5. Run tests:
-   ```bash
-   pytest
-   ```
+
+## Development Commands (Makefile)
+The project includes a Makefile with common development tasks:
+
+```bash
+make help          # Show all available commands
+make format        # Format code with ruff
+make check         # Check code formatting without changes
+make lint          # Lint code with ruff
+make lint-fix      # Lint and auto-fix issues
+make test          # Run tests with pytest
+make coverage      # Run tests with coverage report
+make coverage-html # Generate HTML coverage report
+make compile       # Compile Python files (syntax check)
+make all           # Run format, lint, and test
+make ci            # Run CI checks (format check, lint, coverage)
+make clean         # Clean up generated files
+```
 
 ## Testing
 The project includes comprehensive unit tests with **84%+ code coverage**:
@@ -72,14 +89,15 @@ The project includes comprehensive unit tests with **84%+ code coverage**:
 # Activate virtual environment first
 source .venv/bin/activate
 
-# Run all tests
-pytest
+# Using Makefile (recommended)
+make test          # Run all tests
+make coverage      # Run tests with coverage report
+make coverage-html # Generate HTML coverage report
 
-# Run with coverage report
-pytest --cov=lambda --cov-report=term-missing
-
-# Run specific test file
-pytest tests/test_utils.py -v
+# Using pytest directly
+pytest                                    # Run all tests
+pytest --cov=lambda --cov-report=term-missing  # With coverage
+pytest tests/test_utils.py -v            # Run specific test file
 ```
 
 **Test coverage:**
@@ -136,7 +154,10 @@ This is an **Alexa-hosted skill**, which means AWS infrastructure is managed aut
 ## Contributing
 1. Fork and branch from `main`.
 2. Keep responses in Cuban Spanish to maintain voice consistency.
-3. Run `ruff check` before pushing changes.
+3. Run code quality checks before pushing changes:
+   ```bash
+   make all  # or: make format && make lint && make test
+   ```
 4. Open a pull request describing user-facing changes and deployment considerations.
 
 ## Useful Links
