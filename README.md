@@ -1,7 +1,7 @@
 # Tasa de Cambio Cubana
 
-[![Tests](https://github.com/ragnarok22/tasa-de-cambio/actions/workflows/test.yml/badge.svg)](https://github.com/ragnarok22/tasa-de-cambio/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/ragnarok22/tasa-de-cambio/branch/master/graph/badge.svg)](https://codecov.io/gh/ragnarok22/tasa-de-cambio)
+[![Tests](https://github.com/ragnarok22/tasa-cambio-skill/actions/workflows/test.yml/badge.svg)](https://github.com/ragnarok22/tasa-cambio-skill/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/ragnarok22/tasa-cambio-skill/branch/master/graph/badge.svg)](https://codecov.io/gh/ragnarok22/tasa-cambio-skill)
 
 Alexa skill that answers in Cuban Spanish with up-to-date informal market exchange rates for USD, EUR, and MLC. The backend is an AWS Lambda written in Python and powered by the `ask-sdk`. Rates are retrieved through the companion proxy service [tasa-cambio-proxy](https://github.com/ragnarok22/tasa-cambio-proxy), which relies on the official API from [El Toque](https://eltoque.com/tasas-de-cambio-de-moneda-en-cuba-hoy) and exposes a lightweight API hosted at [tasa-cambio-cuba.vercel.app](https://tasa-cambio-cuba.vercel.app/api/exchange-rate).
 
