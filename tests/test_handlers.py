@@ -190,9 +190,7 @@ class TestHelpIntentHandler:
 
         handler.handle(handler_input)
 
-        assert "Qué bolá asere" in str(
-            handler_input.response_builder.speak.call_args
-        )
+        assert "Qué bolá asere" in str(handler_input.response_builder.speak.call_args)
 
 
 class TestCancelOrStopIntentHandler:

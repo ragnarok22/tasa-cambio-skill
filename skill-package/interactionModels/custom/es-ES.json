@@ -73,7 +73,14 @@
             "dame {amount} {sourceCurrency} en pesos",
             "cuánto es {amount} {sourceCurrency}",
             "a cuánto equivalen {amount} {sourceCurrency}",
-            "{amount} {sourceCurrency} cuántos pesos son"
+            "{amount} {sourceCurrency} cuántos pesos son",
+            "pásame {amount} {sourceCurrency} a pesos",
+            "cuánto son {amount} {sourceCurrency}",
+            "cuántos pesos me dan por {amount} {sourceCurrency}",
+            "si tengo {amount} {sourceCurrency} cuántos pesos son",
+            "{amount} {sourceCurrency} a pesos cubanos",
+            "conviérteme {amount} {sourceCurrency}",
+            "quiero saber cuánto es {amount} {sourceCurrency} en pesos"
           ]
         },
         {

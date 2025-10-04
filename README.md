@@ -25,9 +25,9 @@ Here are some questions you can ask the skill:
   - "Cuánto cuesta el MLC?"
 
 - **Convert currency** (`ConvertCurrencyIntent`):
-  - "Convierte cien dólares a pesos"
-  - "Cuántos pesos son cincuenta euros?"
-  - "A cuánto equivalen doscientos MLC?"
+  - "Convierte 100 dólares a pesos"
+  - "Cuántos pesos son 50 euros?"
+  - "A cuánto equivalen 200 MLC?"
 
 - **Why are rates rising?** (`WhyExchangeRateIntent`):
   - "Por qué está tan caro el cambio?"
