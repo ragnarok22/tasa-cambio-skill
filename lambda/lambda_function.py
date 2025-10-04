@@ -21,7 +21,6 @@ class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for Skill Launch."""
 
     def can_handle(self, handler_input: HandlerInput) -> bool:
-
         return ask_utils.is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
