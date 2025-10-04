@@ -10,7 +10,7 @@ from ask_sdk_core.dispatch_components.request_components import AbstractRequestH
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model.response import Response
-from utils import get_exchange_rates, get_random_greeting
+from utils import get_random_greeting, get_rounded_exchange_rates
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -23,6 +23,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
         return ask_utils.is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
+        logger.info("Processing LaunchRequest")
         speak_output = "Qué bola asere? Dime que quieres saber?"
 
         return (
@@ -40,19 +41,22 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input: HandlerInput) -> Response:
         """Return all exchange rates with dynamic USD/MLC comparison."""
-        currencies = get_exchange_rates()
+        logger.info("Processing ExchangeRateIntent")
+        currencies = get_rounded_exchange_rates()
 
         if currencies is None:
+            logger.warning("Failed to fetch exchange rates")
             speak_output = (
                 "Coño asere, tengo un problema conectándome. "
                 "Intenta de nuevo en un ratito."
             )
             return handler_input.response_builder.speak(speak_output).response
 
-        mlc_value = round(currencies["MLC"], 2)
-        usd_value = round(currencies["USD"], 2)
-        eur_value = round(currencies["EUR"], 2)
+        mlc_value = currencies["MLC"]
+        usd_value = currencies["USD"]
+        eur_value = currencies["EUR"]
 
+        logger.info(f"Rates: USD={usd_value}, EUR={eur_value}, MLC={mlc_value}")
         random_greeting = get_random_greeting()
 
         # Build dynamic comparison between USD and MLC
@@ -80,23 +84,26 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input: HandlerInput) -> Response:
         """Return exchange rate for a specific currency requested by the user."""
-        currencies = get_exchange_rates()
+        logger.info("Processing ExchangeRateRequestIntent")
+        currencies = get_rounded_exchange_rates()
 
         if currencies is None:
+            logger.warning("Failed to fetch exchange rates")
             speak_output = (
                 "Coño asere, tengo un problema conectándome. "
                 "Intenta de nuevo en un ratito."
             )
             return handler_input.response_builder.speak(speak_output).response
 
-        mlc_value = round(currencies["MLC"], 2)
-        usd_value = round(currencies["USD"], 2)
-        eur_value = round(currencies["EUR"], 2)
+        mlc_value = currencies["MLC"]
+        usd_value = currencies["USD"]
+        eur_value = currencies["EUR"]
 
         slots = handler_input.request_envelope.request.intent.slots
         currency_slot = slots.get("currency")
 
         if not currency_slot or not currency_slot.value:
+            logger.warning("Currency slot is empty or missing")
             speak_output = (
                 "No te entendí bien asere. Dime qué moneda quieres saber: "
                 "dólar, euro o M. L. C."
@@ -104,7 +111,7 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
             return handler_input.response_builder.speak(speak_output).response
 
         currency_type = currency_slot.value
-        logger.info(slots)
+        logger.info(f"Requested currency: {currency_type}")
 
         if currency_type == "USD" or currency_type == "dólar":
             text_output = f"El U. S. D. anda por los {usd_value} pesos."
@@ -221,7 +228,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         return True
 
     def handle(self, handler_input: HandlerInput, exception: Exception) -> Response:
-        logger.error(exception, exc_info=True)
+        logger.error(f"Unhandled exception: {exception}", exc_info=True)
 
         speak_output = "Asere lo siento, tuve un problemilla ahí. Trata de nuevo."
 

@@ -66,6 +66,25 @@ def get_exchange_rates():
         return None
 
 
+def get_rounded_exchange_rates():
+    """Fetch and round exchange rates to 2 decimal places.
+
+    Returns:
+        dict: Rounded exchange rates with keys 'USD', 'EUR', 'MLC' (float values)
+        Returns None if API request fails
+    """
+    currencies = get_exchange_rates()
+
+    if currencies is None:
+        return None
+
+    return {
+        "MLC": round(currencies["MLC"], 2),
+        "USD": round(currencies["USD"], 2),
+        "EUR": round(currencies["EUR"], 2),
+    }
+
+
 def get_random_greeting():
     """Return a random Cuban Spanish greeting phrase.
 
