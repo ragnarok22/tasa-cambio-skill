@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-import pytest
 import requests
 
 # Add lambda directory to path for imports

@@ -4,8 +4,6 @@ import sys
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-import pytest
-
 # Add lambda directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "lambda"))
 
@@ -63,7 +61,7 @@ class TestExchangeRateIntentHandler:
         mock_get_rates.return_value = {"USD": 120.0, "EUR": 130.0, "MLC": 118.0}
         mock_greeting.return_value = "En talla asere"
 
-        result = handler.handle(handler_input)
+        handler.handle(handler_input)
 
         assert "El M. L. C. está en 118.0 pesos" in str(
             handler_input.response_builder.speak.call_args
