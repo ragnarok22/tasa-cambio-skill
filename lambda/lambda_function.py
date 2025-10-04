@@ -24,8 +24,6 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
         return ask_utils.is_request_type("LaunchRequest")(handler_input)
 
-    ask_utils.request_util.get_account_linking_access_token
-
     def handle(self, handler_input: HandlerInput) -> Response:
         speak_output = "Qué bola asere? Dime que quieres saber?"
 
