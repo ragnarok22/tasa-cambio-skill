@@ -11,7 +11,8 @@ from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model.response import Response
 
-from .utils import get_exchange_rates, get_random_greating
+import utils
+from utils import get_exchange_rates, get_random_greating
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
