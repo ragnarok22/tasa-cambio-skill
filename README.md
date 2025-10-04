@@ -15,22 +15,24 @@ Here are some questions you can ask the skill:
   - "Alexa, abre tarifa cambio"
 
 - **Get all exchange rates** (`ExchangeRateIntent`):
-  - "Cuáles son las tasas de cambio?"
-  - "Dime las tasas"
+  - "Cuál es la tasa de cambio?"
+  - "Dime la tasa de cambio"
+  - "Precio de las monedas"
 
 - **Get a specific currency rate** (`ExchangeRateRequestIntent`):
-  - "Cuánto está el dólar?"
-  - "Cuál es la tasa del euro?"
-  - "A cómo está el MLC?"
+  - "Cuánto vale el dólar?"
+  - "Cuál es el valor del euro?"
+  - "Cuánto cuesta el MLC?"
 
 - **Convert currency** (`ConvertCurrencyIntent`):
-  - "Convierte cien dólares a pesos cubanos"
-  - "Cuántos pesos son 50 euros?"
-  - "Convierte 200 MLC a CUP"
+  - "Convierte cien dólares a pesos"
+  - "Cuántos pesos son cincuenta euros?"
+  - "A cuánto equivalen doscientos MLC?"
 
 - **Why are rates rising?** (`WhyExchangeRateIntent`):
-  - "Por qué sube la tasa de cambio?"
-  - "Por qué el dólar está tan caro?"
+  - "Por qué está tan caro el cambio?"
+  - "Por qué el dólar está tan alto?"
+  - "Por qué están subiendo las monedas?"
 
 ## Key Features
 - Launch prompt and conversational responses tailored to Cuban slang.
