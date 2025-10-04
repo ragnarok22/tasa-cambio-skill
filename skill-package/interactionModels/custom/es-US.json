@@ -80,7 +80,10 @@
             "si tengo {amount} {sourceCurrency} cuántos pesos son",
             "{amount} {sourceCurrency} a pesos cubanos",
             "conviérteme {amount} {sourceCurrency}",
-            "quiero saber cuánto es {amount} {sourceCurrency} en pesos"
+            "quiero saber cuánto es {amount} {sourceCurrency} en pesos",
+            "cambia {amount} {sourceCurrency} a pesos",
+            "cuánto valen {amount} {sourceCurrency}",
+            "cuánto me dan por {amount} {sourceCurrency}"
           ]
         },
         {
