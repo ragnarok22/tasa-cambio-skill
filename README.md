@@ -7,6 +7,31 @@ Alexa skill that answers in Cuban Spanish with up-to-date informal market exchan
 
 **Try it on Alexa:** [Tasa de Cambio Cubana on Amazon](https://www.amazon.com/dp/B0CLVSTJPB/)
 
+## Example Questions
+
+Here are some questions you can ask the skill:
+
+- **Launch the skill:**
+  - "Alexa, abre tarifa cambio"
+
+- **Get all exchange rates** (`ExchangeRateIntent`):
+  - "Cuáles son las tasas de cambio?"
+  - "Dime las tasas"
+
+- **Get a specific currency rate** (`ExchangeRateRequestIntent`):
+  - "Cuánto está el dólar?"
+  - "Cuál es la tasa del euro?"
+  - "A cómo está el MLC?"
+
+- **Convert currency** (`ConvertCurrencyIntent`):
+  - "Convierte cien dólares a pesos cubanos"
+  - "Cuántos pesos son 50 euros?"
+  - "Convierte 200 MLC a CUP"
+
+- **Why are rates rising?** (`WhyExchangeRateIntent`):
+  - "Por qué sube la tasa de cambio?"
+  - "Por qué el dólar está tan caro?"
+
 ## Key Features
 - Launch prompt and conversational responses tailored to Cuban slang.
 - `ExchangeRateIntent` for the full set of supported currencies.
