@@ -10,8 +10,6 @@ from ask_sdk_core.dispatch_components.request_components import AbstractRequestH
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model.response import Response
-
-import utils
 from utils import get_exchange_rates, get_random_greating
 
 logger = logging.getLogger(__name__)
@@ -49,7 +47,17 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
         eur_value = round(currencies["EUR"], 2)
 
         random_greating = get_random_greating()
-        speak_output = f"{random_greating}. El M. L. C. está en {mlc_value} pesos. El U. S. D. casi en lo mismo con un valor de {usd_value} pesos. Y el Euro ni se diga. Ese anda por los {eur_value} pesos"
+
+        # Build dynamic comparison
+        usd_mlc_diff = abs(usd_value - mlc_value)
+        if usd_mlc_diff < 5:
+            usd_phrase = f"El U. S. D. casi en lo mismo, {usd_value} pesos"
+        elif usd_value > mlc_value:
+            usd_phrase = f"El U. S. D. un poco más arriba con {usd_value} pesos"
+        else:
+            usd_phrase = f"El U. S. D. en {usd_value} pesos"
+
+        speak_output = f"{random_greating}. El M. L. C. está en {mlc_value} pesos. {usd_phrase}. Y el Euro ni se diga, ese anda por los {eur_value} pesos"
 
         return (
             handler_input.response_builder.speak(speak_output)
@@ -82,7 +90,7 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
             text_output = f"El U. S. D. anda por los {usd_value} pesos."
         elif currency_type == "euro":
             text_output = f"El Euro más caliente que el caribe. {eur_value} pesos."
-        elif currency_type == "MLC":
+        elif currency_type.upper() == "MLC":
             text_output = (
                 f"El M. L. C. un poco por debajo del dólar a {mlc_value} pesos."
             )
