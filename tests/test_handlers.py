@@ -56,9 +56,7 @@ class TestExchangeRateIntentHandler:
 
     @patch("lambda_function.get_rounded_exchange_rates")
     @patch("lambda_function.get_random_greeting")
-    def test_successful_response_with_close_values(
-        self, mock_greeting, mock_get_rates
-    ):
+    def test_successful_response_with_close_values(self, mock_greeting, mock_get_rates):
         """Test successful response when USD and MLC are close."""
         handler = ExchangeRateIntentHandler()
         handler_input = Mock()
@@ -118,7 +116,9 @@ class TestExchangeRateRequestIntentHandler:
         # Mock slots
         currency_slot = Mock()
         currency_slot.value = "USD"
-        handler_input.request_envelope.request.intent.slots = {"currency": currency_slot}
+        handler_input.request_envelope.request.intent.slots = {
+            "currency": currency_slot
+        }
 
         handler.handle(handler_input)
 
@@ -137,7 +137,9 @@ class TestExchangeRateRequestIntentHandler:
 
         currency_slot = Mock()
         currency_slot.value = "MLC"
-        handler_input.request_envelope.request.intent.slots = {"currency": currency_slot}
+        handler_input.request_envelope.request.intent.slots = {
+            "currency": currency_slot
+        }
 
         handler.handle(handler_input)
 
@@ -169,7 +171,9 @@ class TestExchangeRateRequestIntentHandler:
 
         currency_slot = Mock()
         currency_slot.value = "bitcoin"
-        handler_input.request_envelope.request.intent.slots = {"currency": currency_slot}
+        handler_input.request_envelope.request.intent.slots = {
+            "currency": currency_slot
+        }
 
         handler.handle(handler_input)
 
