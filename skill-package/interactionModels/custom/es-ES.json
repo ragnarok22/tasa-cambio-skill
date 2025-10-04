@@ -105,7 +105,8 @@
                 "synonyms": [
                   "usd",
                   "u. s. d.",
-                  "dólar"
+                  "dólar",
+                  "dólares"
                 ],
                 "value": "U. S. D."
               },
@@ -124,6 +125,10 @@
             },
             {
               "name": {
+                "synonyms": [
+                  "euros",
+                  "eur"
+                ],
                 "value": "euro"
               },
               "id": "EURO"

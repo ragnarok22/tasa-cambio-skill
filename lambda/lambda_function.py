@@ -117,11 +117,12 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
         currency_type = currency_slot.value
         logger.info(f"Requested currency: {currency_type}")
 
-        if currency_type == "USD" or currency_type == "dólar":
+        currency_lower = currency_type.lower()
+        if currency_lower in ["usd", "u. s. d.", "dólar", "dólares"]:
             text_output = f"El U. S. D. anda por los {usd_value} pesos."
-        elif currency_type == "euro":
+        elif currency_lower in ["euro", "euros", "eur"]:
             text_output = f"El Euro más caliente que el caribe. {eur_value} pesos."
-        elif currency_type.upper() == "MLC":
+        elif currency_lower in ["mlc", "m. l. c.", "eme ele ce"]:
             mlc_usd_diff = abs(mlc_value - usd_value)
             if mlc_usd_diff < 5:
                 text_output = f"El M. L. C. casi igual que el dólar, {mlc_value} pesos."
@@ -191,13 +192,14 @@ class ConvertCurrencyIntentHandler(AbstractRequestHandler):
         # Get exchange rate
         rate = None
         currency_name = ""
-        if currency_type == "USD" or currency_type == "dólar":
+        currency_lower = currency_type.lower()
+        if currency_lower in ["usd", "u. s. d.", "dólar", "dólares"]:
             rate = currencies["USD"]
             currency_name = "dólares"
-        elif currency_type == "euro":
+        elif currency_lower in ["euro", "euros", "eur"]:
             rate = currencies["EUR"]
             currency_name = "euros"
-        elif currency_type.upper() == "MLC":
+        elif currency_lower in ["mlc", "m. l. c.", "eme ele ce"]:
             rate = currencies["MLC"]
             currency_name = "M. L. C."
         else:
