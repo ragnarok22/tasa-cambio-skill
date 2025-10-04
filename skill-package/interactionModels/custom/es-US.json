@@ -1,0 +1,96 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "slots": [],
+          "name": "ExchangeRateIntent",
+          "samples": [
+            "dime la tasa de cambio en Cuba",
+            "Dime la tasa de cambio",
+            "Cuál es la tasa de cambio en Cuba",
+            "Cuál es el precio de las monedas en Cuba",
+            "precio de las monedas",
+            "Cuál es el exchange rate",
+            "Cuál es la tasa de cambio"
+          ]
+        },
+        {
+          "slots": [
+            {
+              "name": "currency",
+              "type": "CURRENCYTYPE"
+            }
+          ],
+          "name": "ExchangeRateRequestIntent",
+          "samples": [
+            "cuanto pagan por el {currency}",
+            "cuál es el valor actual del {currency}",
+            "cuanto cuesta el {currency}",
+            "cual es el valor del {currency}",
+            "cuanto vale el {currency}",
+            "que precio tiene el {currency} hoy",
+            "dime el valor del {currency}",
+            "Cuál es el valor del {currency}"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "synonyms": [
+                  "usd",
+                  "u. s. d.",
+                  "dólar"
+                ],
+                "value": "U. S. D."
+              },
+              "id": "USD"
+            },
+            {
+              "name": {
+                "synonyms": [
+                  "mlc",
+                  "m. l. c.",
+                  "eme ele ce"
+                ],
+                "value": "M. L. C."
+              },
+              "id": "MLC"
+            },
+            {
+              "name": {
+                "value": "euro"
+              },
+              "id": "EURO"
+            }
+          ],
+          "name": "CURRENCYTYPE"
+        }
+      ],
+      "invocationName": "tarifa cambio"
+    }
+  }
+}
