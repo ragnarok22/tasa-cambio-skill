@@ -17,8 +17,9 @@ This is an Alexa Skill for providing Cuban exchange rates (USD, EUR, MLC) in the
   - Entry point: `lambda_handler = sb.lambda_handler()`
 
 - `lambda/utils.py`: Utility functions
-  - `get_exchange_rates()`: Fetches current rates from API via requests
-  - `get_random_greating()`: Returns random Cuban greeting phrases
+  - `get_exchange_rates()`: Fetches current rates from API via requests (with timeout and error handling)
+  - `get_rounded_exchange_rates()`: Helper that fetches and rounds rates to 2 decimals
+  - `get_random_greeting()`: Returns random Cuban greeting phrases
   - `create_presigned_url()`: S3 utility (currently unused)
 
 - `lambda/__init__.py`: Empty file required for Python package recognition
@@ -43,7 +44,7 @@ This is an Alexa Skill for providing Cuban exchange rates (USD, EUR, MLC) in the
 # Install production dependencies
 pip install -r lambda/requirements.txt
 
-# Install dev dependencies (ruff)
+# Install dev dependencies (ruff, pytest, coverage)
 pip install -r requirements-dev.txt
 ```
 
@@ -56,11 +57,22 @@ ruff format lambda/
 ruff check lambda/
 ```
 
-**Testing Compilation:**
+**Testing:**
 ```bash
+# Run all tests
+pytest
+
+# Run tests with coverage report
+pytest --cov=lambda --cov-report=term-missing
+
+# Run specific test file
+pytest tests/test_utils.py -v
+
 # Compile Python files (syntax check)
 python3 -m py_compile lambda/*.py
 ```
+
+Current test coverage: **84%** (25 tests)
 
 **Deployment:**
 This is an Alexa-hosted skill. Deployment happens automatically via Git:

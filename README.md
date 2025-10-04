@@ -1,5 +1,8 @@
 # Tasa de Cambio Cubana
 
+[![Tests](https://github.com/ragnarok22/tasa-de-cambio/actions/workflows/test.yml/badge.svg)](https://github.com/ragnarok22/tasa-de-cambio/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/ragnarok22/tasa-de-cambio/branch/master/graph/badge.svg)](https://codecov.io/gh/ragnarok22/tasa-de-cambio)
+
 Alexa skill that answers in Cuban Spanish with up-to-date informal market exchange rates for USD, EUR, and MLC. The backend is an AWS Lambda written in Python and powered by the `ask-sdk`. Rates are retrieved through the companion proxy service [tasa-cambio-proxy](https://github.com/ragnarok22/tasa-cambio-proxy), which relies on the official API from [El Toque](https://eltoque.com/tasas-de-cambio-de-moneda-en-cuba-hoy) and exposes a lightweight API hosted at [tasa-cambio-cuba.vercel.app](https://tasa-cambio-cuba.vercel.app/api/exchange-rate).
 
 **Try it on Alexa:** [Tasa de Cambio Cubana on Amazon](https://www.amazon.com/dp/B0CLVSTJPB/)
@@ -52,6 +55,28 @@ Alexa skill that answers in Cuban Spanish with up-to-date informal market exchan
    ruff check lambda/
    ruff format lambda/
    ```
+5. Run tests:
+   ```bash
+   pytest
+   ```
+
+## Testing
+The project includes comprehensive unit tests with **84% code coverage**:
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov=lambda --cov-report=term-missing
+
+# Run specific test file
+pytest tests/test_utils.py -v
+```
+
+**Test coverage:**
+- `test_utils.py`: Tests for utility functions (get_exchange_rates, get_rounded_exchange_rates, get_random_greeting)
+- `test_handlers.py`: Tests for Alexa skill handlers (25 tests covering all intents)
 
 ## Local Testing Tips
 - Create a simple invocation payload and call the handler directly:

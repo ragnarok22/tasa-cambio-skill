@@ -8,6 +8,12 @@ venv/
 ENV/
 env/
 
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
 # AWS
 .ask/
 ask-resources.json
