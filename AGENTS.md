@@ -1,40 +1,30 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `lambda/`: Alexa Lambda handlers (`lambda_function.py`) and helpers (`utils.py`); run-time deps pinned in `requirements.txt`.
-- `skill-package/`: ASK manifest, locale-specific interaction models, and icon assets.
-- Root files: `requirements-dev.txt` for tooling and `pyproject.toml` for Ruff configuration. No dedicated `tests/` directory yet—add one if you introduce automated coverage.
+The Alexa runtime resides in `lambda/`, where `lambda_function.py` exposes the handler and `utils.py` centralizes helpers; runtime dependencies are pinned in `lambda/requirements.txt`. Voice models, icons, and the ASK manifest live in `skill-package/` under locale-specific subfolders. Repository-level tooling files (`pyproject.toml`, `requirements-dev.txt`) stay at the root. Introduce automated coverage inside a new top-level `tests/` package, mirroring module names for clarity.
 
 ## Build, Test, and Development Commands
-- Create environment: `cd lambda && python3 -m venv .venv && source .venv/bin/activate`.
-- Install runtime deps: `pip install -r requirements.txt` (inside `lambda/`).
-- Install dev tooling: `pip install -r requirements-dev.txt` (root).
-- Lint & format: `ruff check lambda` and `ruff format lambda`.
-- Package Lambda artifact:
-  ```bash
-  cd lambda
-  rm -rf build && mkdir build
-  pip install -r requirements.txt -t build/
-  cp *.py build/
-  cd build && zip -r ../lambda.zip .
-  ```
+- `cd lambda && python3 -m venv .venv && source .venv/bin/activate`: provision and activate the Lambda virtualenv.
+- `pip install -r requirements.txt`: install production dependencies into the active venv.
+- `pip install -r requirements-dev.txt`: add linting and testing tooling for local work.
+- `ruff check lambda` / `ruff format lambda`: enforce linting and auto-format Python sources.
+- Package for deployment with:
+```bash
+cd lambda
+rm -rf build && mkdir build
+pip install -r requirements.txt -t build/
+cp *.py build/
+cd build && zip -r ../lambda.zip .
+```
 
 ## Coding Style & Naming Conventions
-- Python 3.11+ with Ruff enforcing PEP 8-esque rules, 88-char lines, double quotes, and space indentation.
-- Module names stay snake_case; handlers follow `*RequestHandler` pattern used in `lambda_function.py`.
-- Keep responses in Cuban Spanish to match the skill’s persona.
+Target Python 3.11+, 4-space indentation, and double quotes for strings; Ruff enforces 88-character lines and general PEP 8 hygiene. Keep modules snake_case, class handlers following the `*RequestHandler` suffix, and ensure spoken responses remain in Cuban Spanish to match persona expectations.
 
 ## Testing Guidelines
-- Preferred approach: exercise intents by importing `lambda.lambda_function.lambda_handler` with crafted Alexa payloads.
-- When adding tests, place them under a new `tests/` package and name files `test_<feature>.py`; run with `pytest` (add to `requirements-dev.txt` as needed).
-- Validate proxy integration by hitting `https://tasa-cambio-cuba.vercel.app/api/exchange-rate` or your local proxy before deployment.
+Use `pytest` for intent and helper coverage; name files `tests/test_<feature>.py`. Craft Alexa request payloads and call `lambda.lambda_function.lambda_handler` directly to validate end-to-end behavior. Exercise proxy integrations against `https://tasa-cambio-cuba.vercel.app/api/exchange-rate` (or your staging proxy) before release.
 
 ## Commit & Pull Request Guidelines
-- Follow existing history: conventional prefix (`docs:`, `chore(lint):`, `refactor(lambda):`) plus concise imperative summary.
-- Reference tickets or issues in the body; describe user-facing Alexa changes and deployment steps.
-- Include screenshots or transcript snippets when updating voice responses or interaction models.
+Adopt conventional prefixes from history (`docs:`, `chore(lint):`, `refactor(lambda):`) followed by an imperative summary. Reference related tickets or issues in the body, describe user-visible Alexa changes, and include deployment notes. Attach interaction model diffs, transcripts, or screenshots whenever you adjust utterances or skill assets.
 
 ## Security & Configuration Tips
-- Do not hardcode credentials; rely on Lambda environment variables (`S3_PERSISTENCE_BUCKET`, `S3_PERSISTENCE_REGION`, proxy overrides).
-- Rate data flows through the external proxy repo—verify its deployment status before releasing.
-- Keep third-party dependencies minimal; remove unused libraries during packaging to control bundle size.
+Never hardcode credentials; rely on Lambda environment variables such as `S3_PERSISTENCE_BUCKET` and `S3_PERSISTENCE_REGION`. Audit third-party libraries prior to packaging and prune unused ones to keep the artifact lean. Confirm the external exchange-rate proxy is reachable before shipping updates.

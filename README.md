@@ -13,9 +13,14 @@ Alexa skill that answers in Cuban Spanish with up-to-date informal market exchan
 
 ## Repository Layout
 - `lambda/`: Alexa skill Lambda source, utilities, and runtime dependencies.
+  - `lambda_function.py`: Main skill handlers and entry point.
+  - `utils.py`: Helper functions for API calls and random greetings.
+  - `requirements.txt`: Python dependencies (boto3 excluded as it's pre-installed).
+  - `__init__.py`: Package marker for Python imports.
 - `skill-package/`: ASK skill manifest, locale assets, and interaction models.
 - `requirements-dev.txt`: Tooling for local linting (`ruff`).
 - `pyproject.toml`: Formatting and lint configuration shared across the project.
+- `ask-resources.json`: Alexa-hosted skill configuration.
 
 ## Data Source & Proxy
 - Live API base: `https://tasa-cambio-cuba.vercel.app/api/exchange-rate`.
@@ -24,9 +29,9 @@ Alexa skill that answers in Cuban Spanish with up-to-date informal market exchan
 - When developing locally you can run the proxy project (Node.js) and point the Lambda to your local URL by overriding the constant in `lambda/utils.py`.
 
 ## Prerequisites
-- Python 3.11+ (project targets Python 3.13 but 3.11 works well for AWS Lambda today).
-- AWS CLI configured with credentials that can update the target Lambda function.
-- Alexa Skills Kit (ASK) CLI if you plan to update the skill package.
+- Python 3.8+ (Alexa-hosted skills use Python 3.8 runtime).
+- Alexa Skills Kit (ASK) CLI for deployment.
+- Git access to the Alexa-hosted skill repository (configured automatically by ASK CLI).
 
 ## Local Setup
 1. Create and activate a virtual environment:
@@ -60,31 +65,30 @@ Alexa skill that answers in Cuban Spanish with up-to-date informal market exchan
 - If you are running a local instance of the proxy, update the API base URL in `lambda/utils.py` or via an environment variable to target your local service.
 
 ## Deployment Workflow
-1. Export the Lambda payload with dependencies:
+This is an **Alexa-hosted skill**, which means AWS infrastructure is managed automatically. Deployment is done via Git:
+
+1. Make your changes to the code in the `lambda/` directory
+2. Commit your changes:
    ```bash
-   cd lambda
-   rm -rf build && mkdir build
-   pip install -r requirements.txt -t build/
-   cp *.py build/
-   cd build && zip -r ../lambda.zip .
+   git add .
+   git commit -m "your changes"
    ```
-2. Update the AWS Lambda function:
+3. Push to the master branch to deploy to development:
    ```bash
-   aws lambda update-function-code \
-     --function-name <lambda-function-name> \
-     --zip-file fileb://lambda.zip
+   git push origin master
    ```
-3. Deploy the Alexa skill resources (requires `ask cli` configuration):
+4. AWS will automatically build and deploy your Lambda function
+5. Monitor deployment status:
    ```bash
-   ask deploy --target skill
+   ask smapi get-skill-status -s amzn1.ask.skill.af0ac2f5-8b03-40b9-a70a-e82372ffb852
    ```
 
-## Environment Variables
-The helper `create_presigned_url` expects the following variables when used:
-- `S3_PERSISTENCE_BUCKET`
-- `S3_PERSISTENCE_REGION`
+**Note:** The `master` branch deploys to the development stage. The `prod` branch deploys to the live stage.
 
-They are optional today because the Lambda handlers only call `get_exchange_rates`, but the function is ready for future use cases that need short-lived links to S3 assets.
+## Important Notes
+- **Imports:** The Lambda uses absolute imports (`from utils import ...`) instead of relative imports to ensure compatibility with Alexa-hosted skill deployment.
+- **Dependencies:** `boto3` is excluded from `requirements.txt` as it's pre-installed in AWS Lambda runtime.
+- **Environment Variables:** The helper `create_presigned_url` expects `S3_PERSISTENCE_BUCKET` and `S3_PERSISTENCE_REGION` when used, but these are optional since the current handlers only call `get_exchange_rates`.
 
 ## Skill Configuration Notes
 - Invocation name: `tarifa cambio`.
