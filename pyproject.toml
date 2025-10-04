@@ -4,7 +4,7 @@ target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W"]
-ignore = []
+ignore = ["N999"]  # Ignore invalid module name for 'lambda' directory
 
 [tool.ruff.format]
 quote-style = "double"

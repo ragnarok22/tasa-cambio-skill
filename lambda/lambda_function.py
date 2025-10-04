@@ -57,13 +57,12 @@ class ExchangeRateIntentHandler(AbstractRequestHandler):
         else:
             usd_phrase = f"El U. S. D. en {usd_value} pesos"
 
-        speak_output = f"{random_greating}. El M. L. C. está en {mlc_value} pesos. {usd_phrase}. Y el Euro ni se diga, ese anda por los {eur_value} pesos"
-
-        return (
-            handler_input.response_builder.speak(speak_output)
-            # .ask("add a reprompt if you want to keep the session open for the user to respond")
-            .response
+        speak_output = (
+            f"{random_greating}. El M. L. C. está en {mlc_value} pesos. "
+            f"{usd_phrase}. Y el Euro ni se diga, ese anda por los {eur_value} pesos"
         )
+
+        return handler_input.response_builder.speak(speak_output).response
 
 
 class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
@@ -95,16 +94,15 @@ class ExchangeRateRequestIntentHandler(AbstractRequestHandler):
                 f"El M. L. C. un poco por debajo del dólar a {mlc_value} pesos."
             )
         else:
-            text_output = f"Ni idea de lo que quieres decir compadre. No conozco ningún {currency_type}"
+            text_output = (
+                f"Ni idea de lo que quieres decir compadre. "
+                f"No conozco ningún {currency_type}"
+            )
 
         random_greating = get_random_greating()
         speak_output = f"{random_greating}. {text_output}"
 
-        return (
-            handler_input.response_builder.speak(speak_output)
-            # .ask("add a reprompt if you want to keep the session open for the user to respond")
-            .response
-        )
+        return handler_input.response_builder.speak(speak_output).response
 
 
 class HelpIntentHandler(AbstractRequestHandler):
@@ -114,7 +112,10 @@ class HelpIntentHandler(AbstractRequestHandler):
         return ask_utils.is_intent_name("AMAZON.HelpIntent")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
-        speak_output = "Necesitas que te tire un cabo? Solo pregunta por las tasas de cambio de una moneda en específico y yo te tiro el dato asere."
+        speak_output = (
+            "Necesitas que te tire un cabo? Solo pregunta por las tasas de "
+            "cambio de una moneda en específico y yo te tiro el dato asere."
+        )
 
         return (
             handler_input.response_builder.speak(speak_output)
@@ -145,7 +146,10 @@ class FallbackIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input: HandlerInput) -> Response:
         logger.info("In FallbackIntentHandler")
-        speech = "Hmm, No estoy seguro asere. Puedes decir Ayuda o preguntarme por cualquier moneda en Cuba. Dime que necesitas"
+        speech = (
+            "Hmm, No estoy seguro asere. Puedes decir Ayuda o preguntarme "
+            "por cualquier moneda en Cuba. Dime que necesitas"
+        )
         reprompt = "No entendí un carajo. En qué quieres que te tire un cabo?"
 
         return handler_input.response_builder.speak(speech).ask(reprompt).response
@@ -165,9 +169,10 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
 
 class IntentReflectorHandler(AbstractRequestHandler):
     """The intent reflector is used for interaction model testing and debugging.
-    It will simply repeat the intent the user said. You can create custom handlers
-    for your intents by defining them above, then also adding them to the request
-    handler chain below.
+
+    It will simply repeat the intent the user said. You can create custom
+    handlers for your intents by defining them above, then also adding them
+    to the request handler chain below.
     """
 
     def can_handle(self, handler_input: HandlerInput) -> bool:
@@ -177,17 +182,15 @@ class IntentReflectorHandler(AbstractRequestHandler):
         intent_name = ask_utils.get_intent_name(handler_input)
         speak_output = "You just triggered " + intent_name + "."
 
-        return (
-            handler_input.response_builder.speak(speak_output)
-            # .ask("add a reprompt if you want to keep the session open for the user to respond")
-            .response
-        )
+        return handler_input.response_builder.speak(speak_output).response
 
 
 class CatchAllExceptionHandler(AbstractExceptionHandler):
-    """Generic error handling to capture any syntax or routing errors. If you receive an error
-    stating the request handler chain is not found, you have not implemented a handler for
-    the intent being invoked or included it in the skill builder below.
+    """Generic error handling to capture any syntax or routing errors.
+
+    If you receive an error stating the request handler chain is not found,
+    you have not implemented a handler for the intent being invoked or
+    included it in the skill builder below.
     """
 
     def can_handle(self, handler_input: HandlerInput, exception: Exception) -> bool:
@@ -205,9 +208,10 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         )
 
 
-# The SkillBuilder object acts as the entry point for your skill, routing all request and response
-# payloads to the handlers above. Make sure any new handlers or interceptors you've
-# defined are included below. The order matters - they're processed top to bottom.
+# The SkillBuilder object acts as the entry point for your skill, routing
+# all request and response payloads to the handlers above. Make sure any new
+# handlers or interceptors you've defined are included below.
+# The order matters - they're processed top to bottom.
 
 
 sb = SkillBuilder()
@@ -219,9 +223,9 @@ sb.add_request_handler(ExchangeRateRequestIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
-sb.add_request_handler(
-    IntentReflectorHandler()
-)  # make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+# Make sure IntentReflectorHandler is last so it doesn't override
+# your custom intent handlers
+sb.add_request_handler(IntentReflectorHandler())
 
 sb.add_exception_handler(CatchAllExceptionHandler())
 
