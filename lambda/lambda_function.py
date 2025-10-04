@@ -249,8 +249,11 @@ class HelpIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input: HandlerInput) -> Response:
         speak_output = (
-            "Necesitas que te tire un cabo? Solo pregunta por las tasas de "
-            "cambio de una moneda en específico y yo te tiro el dato asere."
+            "Qué bolá asere! Yo te puedo ayudar con las tasas del mercado "
+            "informal en Cuba. Puedes preguntarme cosas como: cuál es la "
+            "tasa de cambio del dólar, cuánto está el euro, o dime todas "
+            "las tasas. También puedo convertir fulas pa' ti, solo dime: "
+            "convierte cien dólares a pesos cubanos. Qué necesitas saber?"
         )
 
         return (
